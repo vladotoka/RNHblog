@@ -1,12 +1,22 @@
-import { StyleSheet, Text, View } from 'react-native';
-import React, { useContext } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import React, { useContext, useLayoutEffect } from 'react';
 
 import { Context } from '../context/BlogContext';
+import { FontAwesome } from '@expo/vector-icons';
 
-const ShowScreen = ({ route }) => {
+const ShowScreen = ({ navigation, route }) => {
     const { state } = useContext(Context);
-
     const blogPost = state.find((blogPost) => blogPost.id === route.params.id);
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => (
+                <TouchableOpacity onPress={() => navigation.navigate('Edit', { id: route.params.id })}>
+                    <FontAwesome style={{ ...styles.headerRight, ...styles.icon }} name="pencil" />
+                </TouchableOpacity>
+            ),
+        })
+    }, [navigation])
 
     return (
         <View style={styles.screen}>
@@ -32,8 +42,12 @@ const styles = StyleSheet.create({
     content: {
         fontSize: 15,
         paddingHorizontal: 7,
-
-
-
+    },
+    icon: {
+        fontSize: 24,
+        color: "black"
+    },
+    headerRight: {
+        marginRight: 10
     },
 });
