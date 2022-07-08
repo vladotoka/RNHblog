@@ -1,25 +1,20 @@
-import { StyleSheet, Text, View, TextInput } from 'react-native';
-import React, { useState, useContext } from 'react';
+import { StyleSheet } from 'react-native';
+import React, { useContext } from 'react';
 import { Context } from '../context/BlogContext';
+import BlogPostForm from '../components/BlogPostForm';
 
 const EditScreen = ({ route }) => {
     const { state } = useContext(Context);
 
     const blogPost = state.find((post) => post.id === route.params.id);
 
-    const [title, setTitle] = useState(blogPost.title);
-    const [content, setContent] = useState(blogPost.content);
-
-    return (
-        <View>
-            <Text>Edit Title</Text>
-            <TextInput value={title} onChangeText={setTitle} />
-            <Text>Edit Content</Text>
-            <TextInput value={content} onChangeText={setContent} />
-        </View>
-    )
+    return <BlogPostForm
+        edit
+        initialValues={{ title: blogPost.title, content: blogPost.title }}
+        onSubmit={(title, content) => console.log(title, content)}
+    />
 };
 
-export default EditScreen;
-
 const styles = StyleSheet.create({});
+
+export default EditScreen;
