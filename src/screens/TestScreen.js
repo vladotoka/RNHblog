@@ -9,22 +9,24 @@ const TestScreen = () => {
 
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const[dynamicData, setDynamicData] = useState(DATA);
+  const [dynamicData, setDynamicData] = useState(DATA);
+  const [heart, setHeart] = useState(DATA.map(el => { return el.isLiked ? true : false}));
   const { width, height } = Dimensions.get('window');
   const blockWidth = width - 42;
   const contentOffset = (width - blockWidth) / 2;
+  console.log(heart);
 
-  const renderItem = ({ item, animatedValue }) => (
-    <Item text={item.text} isLiked={item.isLiked} animatedValue={animatedValue} />
+  const renderItem = ({ item, itemIndex, currentIndex, animatedValue }) => (
+    <Item text={item.text} isLiked={item.isLiked} animatedValue={animatedValue}/>
   );
 
-  const Item = ({ text, animatedValue, isLiked }) => (
+  const Item = ({ text, isLiked, itemIndex, animatedValue }) => (
     <View style={styles.container}>
       <View style={{ ...styles.item, width: blockWidth }}>
-        <Text style={styles.text}>{text} ci:{currentIndex}</Text>
+        <Text style={styles.text}>{text} ci:{currentIndex} ii: {itemIndex} av:{animatedValue.Value}</Text>
         <View style={styles.footer}>
-          <TouchableOpacity onPress={() => {setDynamicData(state=>[...state, state[currentIndex].isLiked=!state[currentIndex].isLiked  ])}}>
-            <AntDesign name={isLiked ? "heart" : "hearto"} size={34} color="black" />
+          <TouchableOpacity onPress={() => { setHeart(heart.map((el, index) => { return ((index === currentIndex) ? !el : el); })); console.log(animatedValue); }}>
+            <AntDesign name={heart[itemIndex] ? "heart" : "hearto"} size={34} color="black" />
           </TouchableOpacity>
 
         </View>

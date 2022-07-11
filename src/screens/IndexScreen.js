@@ -4,17 +4,23 @@ import { Context } from '../context/BlogContext';
 import { Feather } from '@expo/vector-icons';
 
 const IndexScreen = ({ navigation }) => {
-  const { state, deleteBlogPost } = useContext(Context);
+  const { state, deleteBlogPost, getBlogPosts } = useContext(Context);
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: ({ }) => (
         <TouchableOpacity onPress={() => navigation.navigate('Create')}>
-          <Feather style={{...styles.headerRight, ...styles.icon}} name="plus"/>
+          <Feather style={{ ...styles.headerRight, ...styles.icon }} name="plus" />
         </TouchableOpacity>
       ),
     });
-  }, [navigation])
+  }, [navigation]);
+
+//initial request to get posts from json server
+  useEffect(() => {
+    getBlogPosts();
+  }, [])
+
 
   return (
     <View>
