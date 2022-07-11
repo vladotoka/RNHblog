@@ -1,7 +1,8 @@
 import { StyleSheet, Text, View, FlatList, Button, TouchableOpacity } from 'react-native';
-import React, { useContext, useLayoutEffect, useEffect } from 'react';
+import React, { useContext, useLayoutEffect, useEffect, useCallback } from 'react';
 import { Context } from '../context/BlogContext';
 import { Feather } from '@expo/vector-icons';
+import { useFocusEffect } from '@react-navigation/native';
 
 const IndexScreen = ({ navigation }) => {
   const { state, deleteBlogPost, getBlogPosts } = useContext(Context);
@@ -16,10 +17,23 @@ const IndexScreen = ({ navigation }) => {
     });
   }, [navigation]);
 
-//initial request to get posts from json server
-  useEffect(() => {
-    getBlogPosts();
-  }, [])
+  //request to get posts from json server on every index screen focus
+
+  useFocusEffect(
+    useCallback(
+      () => {
+        getBlogPosts();
+      },
+      [])
+  );
+
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener('focus', () => {
+  //     getBlogPosts();
+  //   });
+
+  //   return unsubscribe;
+  // }, [navigation])
 
 
   return (

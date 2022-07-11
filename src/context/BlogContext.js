@@ -7,14 +7,6 @@ const blogReducer = (state, action) => {
             return action.payload;
         case 'delete_blogpost':
             return state.filter(blogPost => blogPost.id !== action.payload)
-        case 'add_blogpost':
-            return [...state,
-            {
-                id: Math.floor(Math.random() * 99999),
-                title: action.payload.title,
-                content: action.payload.content
-            }
-            ];
         case 'edit_blogpost':
             return state.map((blogPost) => {
                 return blogPost.id === action.payload.id ? action.payload : blogPost;
@@ -30,7 +22,7 @@ const getBlogPosts = dispatch => {
             const response = await jsonServer.get('/blogposts');
             dispatch({ type: 'get_blogposts', payload: response.data });
         } catch (err) {
-            console.error('Upps, json server no response, error: ', err);
+            console.error('Upps, json server no response, maybe you need to update NGROK url in src/api/jsonServer.js! error: ', err);
             return;
 
         }
@@ -39,8 +31,8 @@ const getBlogPosts = dispatch => {
 };
 
 const addBlogPost = (dispatch) => {
-    return (title, content, callback) => {
-        dispatch({ type: 'add_blogpost', payload: { title, content } });
+    return async (title, content, callback) => {
+        await jsonServer.post('/blogposts', {title, content});
         if (callback) {
             callback();
         }
@@ -48,7 +40,9 @@ const addBlogPost = (dispatch) => {
 };
 
 const deleteBlogPost = (dispatch) => {
-    return (id) => {
+    return async (id) => {
+        await jsonServer.delete(`/blogposts/${id}`);
+
         dispatch({ type: 'delete_blogpost', payload: id });
     }
 };
