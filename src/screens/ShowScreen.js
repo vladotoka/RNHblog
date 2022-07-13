@@ -6,8 +6,7 @@ import { FontAwesome } from '@expo/vector-icons';
 
 const ShowScreen = ({ navigation, route }) => {
     const { state } = useContext(Context);
-    const blogPost = state.find((blogPost) => blogPost.id === route.params.id);
-
+    const blogPost = state.find((post) => post.id === route.params.id);
     useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (

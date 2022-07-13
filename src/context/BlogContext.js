@@ -20,7 +20,11 @@ const getBlogPosts = dispatch => {
     return async () => {
         try {
             const response = await jsonServer.get('/blogposts');
-            dispatch({ type: 'get_blogposts', payload: response.data });
+            //somethimes response.data from server is HTML code of server index screen,
+            //this if will prevent to set this response to state
+            if (response.data[0].id) {
+                dispatch({ type: 'get_blogposts', payload: response.data });
+            }
         } catch (err) {
             console.error('Upps, json server no response, maybe you need to update NGROK url in src/api/jsonServer.js! error: ', err);
             return;
@@ -32,7 +36,7 @@ const getBlogPosts = dispatch => {
 
 const addBlogPost = (dispatch) => {
     return async (title, content, callback) => {
-        await jsonServer.post('/blogposts', {title, content});
+        await jsonServer.post('/blogposts', { title, content });
         if (callback) {
             callback();
         }
@@ -48,7 +52,8 @@ const deleteBlogPost = (dispatch) => {
 };
 
 const editBlogPost = (dispatch) => {
-    return (id, title, content, callback) => {
+    return async (id, title, content, callback) => {
+        await jsonServer.put(`/blogposts/${id}`, { title, content });
         dispatch({ type: 'edit_blogpost', payload: { id, title, content } });
         if (callback) {
             callback();

@@ -17,7 +17,7 @@ const IndexScreen = ({ navigation }) => {
     });
   }, [navigation]);
 
-  //request to get posts from json server on every index screen focus
+  // request to get posts from json server on every index screen focus
 
   useFocusEffect(
     useCallback(
@@ -33,7 +33,8 @@ const IndexScreen = ({ navigation }) => {
   //   });
 
   //   return unsubscribe;
-  // }, [navigation])
+  // }, [navigation]);
+
 
 
   return (
